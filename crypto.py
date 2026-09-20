@@ -33,15 +33,16 @@ def decrypt_password(encrypted_text, key):
 
        
 
-salt = generate_salt()
-print("Salt:", salt.hex())
+if __name__ == "__main__":
+    salt = generate_salt()
+    print("Salt:", salt.hex())
 
-password = "test123"
-key = derive_key(password, salt)
-print("Key:", key)
+    password = "test123"
+    key = derive_key(password, salt)
+    print("Key:", key)
 
-encrypted = encrypt_password("MyNetflixPassword123", key)
-print("Encrypted:", encrypted)
+    encrypted = encrypt_password("MyNetflixPassword123", key)
+    print("Encrypted:", encrypted)
 
-decrypted = decrypt_password(encrypted, key)
-print("Decrypted:", decrypted)
+    decrypted = decrypt_password(encrypted, key)
+    print("Decrypted:", decrypted)
