@@ -33,3 +33,10 @@ entries.append(new_entry)
 save_vault(salt.hex(), entries)
 
 print("Password saved!")
+
+print("\nYour saved passwords:")
+for entry in entries:
+    label = entry["label"]
+    encrypted = entry["password"]
+    decrypted = decrypt_password(encrypted.encode(), key)
+    print(f"Label: {label}, Password: {decrypted}")
