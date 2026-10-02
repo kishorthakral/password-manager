@@ -21,22 +21,37 @@ print("Using Salt:", salt)
 master_password = input("Enter your master password: ")
 key = derive_key(master_password, salt)
 
-label = input("Enter a label (e.g Gmail) for your entry: ")
-password_to_store = input("Enter the password you want to store: ")
+while True:
+    print("\n--- Password Manager Menu ---")
+    print("1. Add a new password")
+    print("2. View saved passwords")    
+    print("3. Exit")
+    choice = input("Enter your choice: ")
 
-encrypted_password = encrypt_password(password_to_store, key)
-encrypted_password_str = encrypted_password.decode()
+    if choice == "1":
+        label = input("Enter a label (e.g Gmail) for your entry: ") 
+        password_to_store = input("Enter the password you want to store: ")
+        encrypted_password = encrypt_password(password_to_store, key)
+        encrypted_password_str = encrypted_password.decode()
+        new_entry = {"label": label, "password": encrypted_password_str}
+        entries.append(new_entry)
+        save_vault(salt.hex(), entries)
+        print("Password saved!")
 
-new_entry = {"label": label, "password": encrypted_password_str}
 
-entries.append(new_entry)
-save_vault(salt.hex(), entries)
+    elif choice == "2":
+        print("\nYour saved passwords:")
+        for entry in entries:
+            label = entry["label"]
+            encrypted = entry["password"]
+            decrypted = decrypt_password(encrypted.encode(), key)
+            print(f"Label: {label}, Password: {decrypted}")
 
-print("Password saved!")
+    elif choice == "3":
+        print("Exiting...")
+        break
 
-print("\nYour saved passwords:")
-for entry in entries:
-    label = entry["label"]
-    encrypted = entry["password"]
-    decrypted = decrypt_password(encrypted.encode(), key)
-    print(f"Label: {label}, Password: {decrypted}")
+    else:
+        print("Invalid choice. Please try again.")
+
+
