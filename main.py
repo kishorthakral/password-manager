@@ -1,6 +1,7 @@
 import os
 from crypto import derive_key, generate_salt, encrypt_password, decrypt_password
 from storage import save_vault, load_vault
+from getpass import getpass
 
 if os.path.exists("vault.json"):
     print("Vault found. Loading...")
@@ -8,7 +9,6 @@ if os.path.exists("vault.json"):
     salt = bytes.fromhex(vault_data["salt"])
     entries = vault_data["entries"]
     
-
 else:
     print("No Vault found. Creating a new one...")
     salt = generate_salt()
@@ -18,7 +18,7 @@ else:
 
 print("Using Salt:", salt)
 
-master_password = input("Enter your master password: ")
+master_password = getpass("Enter your master password: ")
 key = derive_key(master_password, salt)
 
 while True:
@@ -30,7 +30,7 @@ while True:
 
     if choice == "1":
         label = input("Enter a label (e.g Gmail) for your entry: ") 
-        password_to_store = input("Enter the password you want to store: ")
+        password_to_store = getpass("Enter the password you want to store: ")
         encrypted_password = encrypt_password(password_to_store, key)
         encrypted_password_str = encrypted_password.decode()
         new_entry = {"label": label, "password": encrypted_password_str}
