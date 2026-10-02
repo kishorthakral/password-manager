@@ -2,6 +2,7 @@ import os
 from crypto import derive_key, generate_salt, encrypt_password, decrypt_password
 from storage import save_vault, load_vault
 from getpass import getpass
+from cryptography.fernet import InvalidToken
 
 if os.path.exists("vault.json"):
     print("Vault found. Loading...")
@@ -44,8 +45,11 @@ while True:
         for entry in entries:
             label = entry["label"]
             encrypted = entry["password"]
-            decrypted = decrypt_password(encrypted.encode(), key)
-            print(f"Label: {label}, Password: {decrypted}")
+            try:
+                decrypted = decrypt_password(encrypted.encode(), key)
+                print(f"Label: {label}, Password: {decrypted}")
+            except InvalidToken:
+                print(f"Label: {label}, Password: [Decryption Failed - Wrong Master Password]")
 
     elif choice == "3":
         print("Exiting...")
