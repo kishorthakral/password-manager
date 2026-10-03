@@ -25,8 +25,9 @@ key = derive_key(master_password, salt)
 while True:
     print("\n--- Password Manager Menu ---")
     print("1. Add a new password")
-    print("2. View saved passwords")    
-    print("3. Exit")
+    print("2. View saved passwords")   
+    print("3. Delete a password") 
+    print("4. Exit")
     choice = input("Enter your choice: ")
 
     if choice == "1":
@@ -55,6 +56,20 @@ while True:
                 print(f"Label: {label}, Password: [Decryption Failed - Wrong Master Password]")
 
     elif choice == "3":
+        label_to_delete = input("Enter the label of the password you want to delete: ")
+        found = False
+        for entry in entries:
+            if entry["label"] == label_to_delete:
+                entries.remove(entry)
+                found = True
+                break
+        if found:
+            save_vault(salt.hex(), entries)
+            print(f"Password for label '{label_to_delete}' deleted.")
+        else:
+            print(f"No entry found for label '{label_to_delete}'.")
+                            
+    elif choice == "4":
         print("Exiting...")
         break
 
