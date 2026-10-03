@@ -32,6 +32,9 @@ while True:
     if choice == "1":
         label = input("Enter a label (e.g Gmail) for your entry: ") 
         password_to_store = getpass("Enter the password you want to store: ")
+        if not label or not password_to_store:
+            print("Label and password cannot be empty.")
+            continue
         encrypted_password = encrypt_password(password_to_store, key)
         encrypted_password_str = encrypted_password.decode()
         new_entry = {"label": label, "password": encrypted_password_str}
